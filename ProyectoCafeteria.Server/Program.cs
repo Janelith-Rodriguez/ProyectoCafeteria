@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProyectoCafeteria.BD.Data;
 
 //--------------------------------------------------------------------------------------------------
 //Configuracion de los servicios en el constructor de la aplicacion
