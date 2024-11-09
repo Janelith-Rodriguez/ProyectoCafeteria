@@ -18,5 +18,7 @@ namespace ProyectoCafeteria.BD.Data.Entity
         [Required(ErrorMessage = "El password del Usuario es obligatorio.")]
         [MaxLength(50, ErrorMessage = "Maximo numero de caracteres{1}.")]
         public string Password { get; set; }
+
+        public List<Carrito> Carritos { get; set; }
     }
 }
