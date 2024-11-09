@@ -21,7 +21,39 @@ namespace ProyectoCafeteria.Server.Controllers
         {
             return await context.Usuarios.ToListAsync();
         }
-        [HttpPost]
+
+        [HttpGet("{id:int}")] //api/Usuarios/2------------ // Método para obtener un usuario por su ID
+        public async Task<ActionResult<Usuario>> Get(int id)
+        {
+                Usuario? c = await context.Usuarios
+                          .FirstOrDefaultAsync(x => x.Id == id);
+            if (c == null)
+            {
+                return NotFound();
+            }
+            return c;
+        }
+
+        //[HttpGet("{cod}")] //api/Usuarios/2------------ // Método para obtener un usuario por su ID
+        //public async Task<ActionResult<Usuario>> GetByCod(string cod)
+        //{
+        //    Usuario? c = await context.Usuarios
+        //              .FirstOrDefaultAsync(x => x.Codigo == cod);
+        //    if (c == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return c;
+        //}
+
+        [HttpGet("existe/{id:int}")] //api/Usuarios/existe/2
+        public async Task<ActionResult<bool>> Existe(int id)
+        {
+            var existe = await context.Usuarios.AnyAsync(x => x.Id == id);
+            return existe;
+        }
+
+        [HttpPost]   // Método para crear un nuevo usuario
         public async Task<ActionResult<int>> Post(Usuario entidad)
         {
             try
@@ -30,9 +62,9 @@ namespace ProyectoCafeteria.Server.Controllers
                 await context.SaveChangesAsync();
                 return entidad.Id;
             }
-            catch (Exception e)
+            catch (Exception err)
             {
-               return BadRequest(e.Message);
+                return BadRequest(err.Message);
             }
         }
 
@@ -44,7 +76,7 @@ namespace ProyectoCafeteria.Server.Controllers
                 return BadRequest("Datos Incorrectos");
             }
             var c = await context.Usuarios
-                          .Where(e => e.Id==id)
+                          .Where(reg => reg.Id == id)
                           .FirstOrDefaultAsync();
             if (c == null)
             {
@@ -65,6 +97,22 @@ namespace ProyectoCafeteria.Server.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var existe = await context.Usuarios.AnyAsync(x => x.Id == id);
+            if (!existe)
+            {
+                return NotFound($"El usuario {id} no existe.");
+            }
+            Usuario EntidadABorrar = new Usuario();
+            EntidadABorrar.Id = id;
+
+            context.Remove(EntidadABorrar);
+            await context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

@@ -20,7 +20,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<Context>(op => op.UseSqlServer("name=conn"));
 
-
 //------------------------------------------------------------------------------------------------
 //construcción de la aplicación
 var app = builder.Build();
